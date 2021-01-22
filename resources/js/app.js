@@ -5,8 +5,16 @@
  */
 
 require('./bootstrap');
+import Vue from 'vue';
+import VueRouter from 'vue-router';
 
+Vue.use(VueRouter);
 window.Vue = require('vue');
+
+let routes = [
+    { path: '/dashboard', component: require('./components/Dashboard.vue').default },
+    { path: '/profile', component: require('./components/Profile.vue').default }
+  ]
 
 /**
  * The following block of code may be used to automatically register your
@@ -26,7 +34,12 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
+const router = new VueRouter({
+    mode: 'history',
+    routes : routes // short for `routes: routes`
+  })
 
 const app = new Vue({
     el: '#app',
+    router
 });

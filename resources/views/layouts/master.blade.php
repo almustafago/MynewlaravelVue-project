@@ -8,6 +8,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- CSRF Token -->
+    <meta name="csrf-token" content="{{ csrf_token() }}">
   <title>My Blog</title>
 
   <!-- Theme style -->
@@ -82,7 +84,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                with font-awesome or any other icon font library -->
                <li class="nav-item">
             <router-link to="/dashboard" class="nav-link">
-              <i class="nav-icon fas fa-tachometer-alt"></i>
+              <i class="nav-icon fas fa-tachometer-alt  text-blue"></i>
               <p>
                 Dashboard
                 
@@ -100,10 +102,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="#" class="nav-link ">
+                <router-link to="/users" class="nav-link ">
                   <i class="nav-icon fas fa-user"></i>
-                  <p>Active Page</p>
-                </a>
+                  <p>Users</p>
+                </router-link>
               </li>
               <li class="nav-item">
                 <a href="#" class="nav-link">
@@ -123,13 +125,20 @@ scratch. This page gets rid of all links and provides the needed markup only.
             </router-link >
           </li>
           <li class="nav-item">
-            <a href="#" class="nav-link">
-              <i class="fas fa-power-off nav-icon"></i>
-              <p>
-                Logout
-                
-              </p>
-            </a>
+            
+             <a class="nav-link" href="{{ route('logout') }}"
+                                       onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();">
+                                                      <i class="fas fa-power-off nav-icon text-red"></i>
+                                                      <p>
+                                        {{ __('Logout') }}
+                                        </p>
+                                    </a>
+
+                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                        @csrf
+                                    </form>
+                                
           </li>
           
         </ul>
@@ -145,15 +154,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <div class="content-header">
       <div class="container-fluid">
         <div class="row mb-2">
-          <div class="col-sm-6">
-            <h1 class="m-0">Starter Page</h1>
-          </div><!-- /.col -->
-          <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item active">Starter Page</li>
-            </ol>
-          </div><!-- /.col -->
+          
+          
         </div><!-- /.row -->
       </div><!-- /.container-fluid -->
     </div>

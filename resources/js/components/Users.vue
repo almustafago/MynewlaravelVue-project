@@ -20,17 +20,19 @@
                 <tr>
                   <th>ID</th>
                   <th>User</th>
-                  <th>Date</th>
+                  <th>Email</th>
+                  <th>Register At</th>
                   <th>Status</th>
                   <th>Reason</th>
                 </tr>
               </thead>
-              <tbody>
-                <tr>
-                  <td>183</td>
-                  <td>John Doe</td>
-                  <td>11-7-2014</td>
-                  <td><span class="tag tag-success">Approved</span></td>
+              <tbody v-for="user in users" :key="user.id">
+                <tr >
+                  <td>{{user.id}}</td>
+                  <td>{{user.name}}</td>
+                  <td>{{user.email}}</td>
+                  <td>{{user.created_at | myDate}}</td>
+                  <td><span class="tag tag-success">{{user.type | upText}}</span></td>
                   <td>
                     <a href="">
                       <i class="fas fa-edit text-blue"></i>
@@ -59,6 +61,7 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
+      <form @submit.prevent="createUser">
       <div class="modal-body">
         <div class="form-group">
       
@@ -69,15 +72,39 @@
 
     <div class="form-group">
       
-      <input v-model="form.email" type="email" name="email" placeholder="email"
+      <input v-model="form.email" type="email" name="email" placeholder="Email"
         class="form-control" :class="{ 'is-invalid': form.errors.has('email') }">
       <has-error :form="form" field="email"></has-error>
+    </div>
+    <div class="form-group">
+      
+      <textarea v-model="form.bio" type="bio" name="bio" placeholder="bio"
+        class="form-control" :class="{ 'is-invalid': form.errors.has('bio') }"></textarea>
+      <has-error :form="form" field="bio"></has-error>
+    </div>
+     <div class="form-group">
+      
+      <select v-model="form.type"  name="type" id="type" 
+        class="form-control" :class="{ 'is-invalid': form.errors.has('type') }">
+        <option vlaue="">Select User Role</option>
+        <option vlaue="admin">Admin</option>
+        <option value="author">Author</option>
+        <option value= "satndard">Standard</option>
+        </select>
+      <has-error :form="form" field="type"></has-error>
+    </div>
+    <div class="form-group">
+      
+      <input v-model="form.password" type="password" name="password" placeholder="password"
+        class="form-control" :class="{ 'is-invalid': form.errors.has('password') }">
+      <has-error :form="form" field="password"></has-error>
     </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save</button>
+        <button type="submit" class="btn btn-primary">Save</button>
       </div>
+      </form>
     </div>
   </div>
 </div>
@@ -89,17 +116,45 @@ export default {
     data(){
 
         return{
+            users: {},
             form: new Form({
                 name:'',
                 email:'',
                 password: '',
+                type:'',
+                bio:'',
+                photo:'',
             })
 
         }
 
     },
-  mounted() {
-    console.log("Component mounted.");
+    methods:{
+
+      loadUsers(){
+        axios.get("api/user").then(({data})=>(this.users= data.data));
+
+      },
+      createUser(){
+       this.$Progress.start();
+        this.form.post('api/user');
+         $('#examplemodal').modal('hide');
+        toast.fire({
+         icon: 'success',
+           title: 'User created in successfully'
+        });
+        this.$Progress.finish();
+         
+
+        
+
+      },
+
+    },
+  created() {
+    this.loadUsers();
+    //setInterval(()=>this.loadUsers(), 3000);
+
   },
 };
 </script>
